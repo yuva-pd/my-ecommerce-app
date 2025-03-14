@@ -1,55 +1,16 @@
 "use client";
-import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
-
-interface Product {
-  _id: string;
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-  category: string;
-  quantity: number; // Added quantity field
-}
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store/redux/store"; // Import store types
+import {
+  increaseQuantity,
+  decreaseQuantity,
+  removeItem,
+} from "../store/redux/slices/cartSlice"; // Import actions
 
 export default function Cart() {
-  const [cart, setCart] = useState<Product[]>([]);
-
-  useEffect(() => {
-    const cartItems = JSON.parse(localStorage.getItem("cart") || "[]");
-    setCart(cartItems);
-  }, []);
-
-  // 🔼 Increase Quantity
-  const increaseQuantity = (id: string) => {
-    const updatedCart = cart.map((item) =>
-      item._id === id ? { ...item, quantity: item.quantity + 1 } : item
-    );
-    updateCart(updatedCart);
-  };
-
-  // 🔽 Decrease Quantity (Remove if quantity reaches 0)
-  const decreaseQuantity = (id: string) => {
-    const updatedCart = cart
-      .map((item) =>
-        item._id === id ? { ...item, quantity: item.quantity - 1 } : item
-      )
-      .filter((item) => item.quantity > 0);
-    updateCart(updatedCart);
-  };
-
-  // ❌ Remove Item from Cart
-  const removeItem = (id: string) => {
-    const updatedCart = cart.filter((item) => item._id !== id);
-    updateCart(updatedCart);
-  };
-
-  // 📦 Update Cart in localStorage
-  const updateCart = (updatedCart: Product[]) => {
-    setCart(updatedCart);
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
-    window.dispatchEvent(new Event("storage")); // Notify navbar
-  };
+  const dispatch = useDispatch();
+  const cart = useSelector((state: RootState) => state.cart.items); // Get cart items from Redux
 
   return (
     <main className="min-h-screen bg-black text-white">
@@ -72,14 +33,14 @@ export default function Cart() {
                 {/* Quantity Controls */}
                 <div className="flex items-center mt-3 space-x-3">
                   <button
-                    onClick={() => decreaseQuantity(product._id)}
+                    onClick={() => dispatch(decreaseQuantity(product._id))}
                     className="px-3 py-1 bg-gray-700 text-white rounded"
                   >
                     -
                   </button>
                   <span className="text-lg font-bold">{product.quantity}</span>
                   <button
-                    onClick={() => increaseQuantity(product._id)}
+                    onClick={() => dispatch(increaseQuantity(product._id))}
                     className="px-3 py-1 bg-gray-700 text-white rounded"
                   >
                     +
@@ -88,7 +49,7 @@ export default function Cart() {
 
                 {/* Remove Item Button */}
                 <button
-                  onClick={() => removeItem(product._id)}
+                  onClick={() => dispatch(removeItem(product._id))}
                   className="mt-3 w-full bg-red-500 text-white font-bold py-2 rounded hover:bg-red-700 transition"
                 >
                   Remove

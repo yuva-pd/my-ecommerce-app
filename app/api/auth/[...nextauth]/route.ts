@@ -1,59 +1,28 @@
-import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import bcrypt from "bcrypt";
 
-// Fake Database (Replace with a real database)
-const users = [
-  {
-    id: "1",
-    email: "test@example.com",
-    password: bcrypt.hashSync("password123", 10), // Hashed password
-  },
-];
-
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
-    // Google Provider
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
-
-    // Credentials Provider (Email/Password)
-    CredentialsProvider({
-      name: "Credentials",
-      credentials: {
-        email: {
-          label: "Email",
-          type: "text",
-          placeholder: "test@example.com",
-        },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        const user = users.find((u) => u.email === credentials?.email);
-
-        if (!user || !credentials?.password) {
-          throw new Error("Invalid email or password");
-        }
-
-        const isValid = await bcrypt.compare(
-          credentials.password,
-          user.password
-        );
-        if (!isValid) {
-          throw new Error("Invalid email or password");
-        }
-
-        return { id: user.id, email: user.email };
-      },
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
   ],
-  pages: {
-    signIn: "/login", // Custom login page
+  callbacks: {
+    async jwt({ token, account, profile }) {
+      if (account) {
+        token.accessToken = account.access_token;
+        token.id = profile?.sub;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      session.user.id = token.id;
+      session.accessToken = token.accessToken; // Attach token to session
+      return session;
+    },
   },
-  session: { strategy: "jwt" },
+  secret: process.env.NEXTAUTH_SECRET,
 };
 
 const handler = NextAuth(authOptions);
