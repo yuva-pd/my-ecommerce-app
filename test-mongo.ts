@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import { NextResponse } from "next/server";
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ async function testMongoDB() {
     mongoose.connection.close();
   } catch (error) {
     console.error("❌ MongoDB connection error:", error);
+    return NextResponse.json({ error: "Failed to fetch" }, { status: 500 });
   }
 }
 

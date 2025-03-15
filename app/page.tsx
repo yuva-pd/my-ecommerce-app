@@ -1,22 +1,19 @@
 "use client";
-import Link from "next/link"; // ✅ Import Link
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "./store/redux/store";
-import { LoaderPinwheel } from "lucide-react";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
+import React from "react";
 
 export default function Home() {
   const router = useRouter();
-  const [token, setToken] = useState<string | null>(null);
   const auth = useSelector((state: RootState) => state.auth);
   useEffect(() => {
-    setToken(auth.accessToken);
     // if (auth.accessToken) {
     router.push("/products");
     // }
-  }, [auth]);
+  }, [auth, router]);
   // return (
   //   <main>
   //     {token

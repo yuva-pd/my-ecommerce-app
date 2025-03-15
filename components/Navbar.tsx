@@ -6,6 +6,7 @@ import { RootState } from "../app/store/redux/store";
 import { logout } from "../app/store/redux/slices/authSlice";
 import { signOut } from "next-auth/react";
 import { useState, useEffect, useRef } from "react";
+import React from "react";
 
 const Navbar = () => {
   const router = useRouter();

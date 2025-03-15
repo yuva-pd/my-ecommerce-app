@@ -1,10 +1,11 @@
 "use client";
 
-import { Router } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../store/redux/slices/authSlice";
+import { NextResponse } from "next/server";
+import React from "react";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -14,28 +15,28 @@ export default function Register() {
   const [step, setStep] = useState(1);
   const router = useRouter();
   const dispatch = useDispatch();
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
 
-    if (password !== confirmPassword) {
-      alert("Passwords do not match!");
-      return;
-    }
+  //   if (password !== confirmPassword) {
+  //     alert("Passwords do not match!");
+  //     return;
+  //   }
 
-    const res = await fetch("/api/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+  //   const res = await fetch("/api/auth/register", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({ email, password }),
+  //   });
 
-    const data = await res.json();
-    if (res.ok) {
-      alert("Signup successful!");
-      window.location.href = "/login"; // Redirect to login
-    } else {
-      alert(data.error || "Something went wrong");
-    }
-  };
+  //   const data = await res.json();
+  //   if (res.ok) {
+  //     alert("Signup successful!");
+  //     window.location.href = "/login"; // Redirect to login
+  //   } else {
+  //     alert(data.error || "Something went wrong");
+  //   }
+  // };
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -102,6 +103,7 @@ export default function Register() {
       }
     } catch (error) {
       console.error("Error verifying OTP:", error);
+      return NextResponse.json({ error: "Failed to fetch" }, { status: 500 });
     }
   };
   const sendOtp = async () => {
@@ -118,7 +120,7 @@ export default function Register() {
       body: JSON.stringify({ phoneNumber: formattedPhoneNumber }), // ✅ Send phoneNumber, not email
     });
 
-    const data = await res.json();
+    // const data = await res.json();
     if (res.ok) {
       // localStorage.setItem("otp", data.otp.toString());
       // alert(`OTP Sent: ${data.otp}`); // For testing only

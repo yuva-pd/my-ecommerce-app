@@ -1,22 +1,28 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  // Add any other fields your User object may have
+}
+
 interface AuthState {
   accessToken: string | null;
-  user: any | null;
+  user: User | null; // Use User type instead of `any`
 }
 
 const initialState: AuthState = {
-  accessToken: null, // Don't read localStorage here
+  accessToken: null,
   user: null,
 };
-
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
     login: (
       state,
-      action: PayloadAction<{ accessToken: string; user: any }>
+      action: PayloadAction<{ accessToken: string; user: User }>
     ) => {
       state.accessToken = action.payload.accessToken;
       state.user = action.payload.user;

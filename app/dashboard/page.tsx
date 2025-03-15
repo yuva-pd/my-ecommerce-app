@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation"; // ✅ Correct
+import React from "react"; // Only needed in certain setups, like TypeScript
 
 export default function Dashboard() {
   const [loading, setLoading] = useState(true);

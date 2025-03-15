@@ -7,6 +7,7 @@ import {
   decreaseQuantity,
   removeItem,
 } from "../store/redux/slices/cartSlice"; // Import actions
+import Image from "next/image";
 
 export default function Cart() {
   const dispatch = useDispatch();

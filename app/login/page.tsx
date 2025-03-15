@@ -2,12 +2,12 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { useSession, signOut } from "next-auth/react";
 import { useDispatch } from "react-redux";
 import { login } from "../store/redux/slices/authSlice";
+import Image from "next/image";
+import React from "react";
 
 export default function Login() {
-  const { data: session } = useSession();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
@@ -34,13 +34,12 @@ export default function Login() {
       alert(data.error || "Login failed");
     }
   };
-
+  const token = localStorage.getItem("token");
   useEffect(() => {
-    const token = localStorage.getItem("token");
     if (!token) {
       router.push("/login");
     }
-  }, []);
+  }, [token, router]);
 
   return (
     <main className="flex items-center justify-center min-h-screen bg-black text-white">
@@ -86,12 +85,18 @@ export default function Login() {
           onClick={() => signIn("google", { callbackUrl: "/products" })}
           className="mt-4 w-full flex justify-center items-center gap-2 bg-red-500 text-white py-2 rounded hover:bg-red-600 transition"
         >
-          <img src="/google-icon.svg" alt="Google" className="w-5 h-5" />
+          <Image
+            width={300}
+            height={300}
+            src="/google-icon.svg"
+            alt="Google"
+            className="w-5 h-5"
+          />
           Continue with Google
         </button>
 
         <p className="mt-4 text-center text-gray-400">
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <a href="/register" className="text-white hover:underline">
             Sign Up
           </a>

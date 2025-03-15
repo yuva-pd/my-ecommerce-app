@@ -6,6 +6,8 @@ import { fetchProducts } from "@/app/store/redux/slices/productSlice";
 import { addToCart } from "@/app/store/redux/slices/cartSlice";
 import Navbar from "@/components/Navbar";
 import { RootState, AppDispatch } from "@/app/store/redux/store";
+import Image from "next/image";
+import React from "react";
 
 export default function ProductDetail() {
   const { id } = useParams();

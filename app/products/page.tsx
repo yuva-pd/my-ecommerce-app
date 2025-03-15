@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../store/redux/slices/productSlice";
 import { AppDispatch, RootState } from "../store/redux/store";
 import { addToCart } from "../store/redux/slices/cartSlice";
+import Image from "next/image";
+import React from "react";
 
 export default function Products() {
   const router = useRouter();
@@ -13,13 +15,18 @@ export default function Products() {
   const { products, loading, error } = useSelector(
     (state: RootState) => state.products
   );
-  const auth = useSelector((state: RootState) => state.auth);
-
+  interface Product {
+    id: string;
+    name: string;
+    price: number;
+    imageUrl: string;
+    quantity?: number;
+  }
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
 
-  const handleAddToCart = (product) => {
+  const handleAddToCart = (product: Product) => {
     dispatch(addToCart(product));
     alert("Item added to cart");
   };
