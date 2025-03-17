@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { useDispatch } from "react-redux";
 import { login } from "../store/redux/slices/authSlice";
-import Image from "next/image";
+// import Image from "next/image";
 import React from "react";
 
 export default function Login() {
@@ -85,8 +85,7 @@ export default function Login() {
           onClick={() => signIn("google", { callbackUrl: "/products" })}
           className="mt-4 w-full flex justify-center items-center gap-2 bg-red-500 text-white py-2 rounded hover:bg-red-600 transition"
         >
-          <Image
-            width={300}
+          <img
             height={300}
             src="/google-icon.svg"
             alt="Google"

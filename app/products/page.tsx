@@ -6,8 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../store/redux/slices/productSlice";
 import { AppDispatch, RootState } from "../store/redux/store";
 import { addToCart } from "../store/redux/slices/cartSlice";
-import Image from "next/image";
+// import Image from "next/image";
 import React from "react";
+import BNavbar from "@/components/Bottomnav";
 
 // Define the Product interface here for better reusability
 interface Product {
@@ -75,6 +76,7 @@ export default function Products() {
           )}
         </div>
       </section>
+      <BNavbar />
     </main>
   );
 }

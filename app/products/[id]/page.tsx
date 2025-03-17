@@ -6,8 +6,9 @@ import { fetchProducts } from "@/app/store/redux/slices/productSlice";
 import { addToCart } from "@/app/store/redux/slices/cartSlice";
 import Navbar from "@/components/Navbar";
 import { RootState, AppDispatch } from "@/app/store/redux/store";
-import Image from "next/image";
+// import Image from "next/image";
 import React from "react";
+import BNavbar from "@/components/Bottomnav";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -56,6 +57,7 @@ export default function ProductDetail() {
           </p>
         )}
       </div>
+      <BNavbar />
     </main>
   );
 }

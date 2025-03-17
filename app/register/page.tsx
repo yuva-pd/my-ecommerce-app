@@ -134,7 +134,7 @@ export default function Register() {
     <main className="flex items-center justify-center min-h-screen bg-black text-white">
       <div className="w-full max-w-md p-6 bg-gray-900 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold text-center">Sign Up</h2>
-        {false ? (
+        {true ? (
           <form onSubmit={handleSignup} className="mt-4 space-y-4">
             <div>
               <label htmlFor="email" className="block text-gray-400">
