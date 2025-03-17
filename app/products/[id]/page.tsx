@@ -35,7 +35,7 @@ export default function ProductDetail() {
       <div className="p-6">
         {product ? (
           <div className="max-w-2xl mx-auto bg-gray-800 p-6 rounded-lg shadow-lg">
-            <Image
+            <img
               src={product.image}
               alt={product.name}
               className="w-full h-80 object-cover rounded-lg mb-4"

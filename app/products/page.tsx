@@ -55,7 +55,7 @@ export default function Products() {
                 key={product._id}
                 className="bg-gray-800 p-4 rounded-lg shadow-lg transform transition duration-300 hover:scale-105"
               >
-                <Image
+                <img
                   src={product.image}
                   alt={product.name}
                   className="w-full h-64 object-cover rounded-lg mb-4 cursor-pointer"
