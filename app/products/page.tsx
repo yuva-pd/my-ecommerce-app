@@ -9,25 +9,33 @@ import { addToCart } from "../store/redux/slices/cartSlice";
 import Image from "next/image";
 import React from "react";
 
+// Define the Product interface here for better reusability
+interface Product {
+  _id: string;
+  name: string;
+  description: string;
+  price: number;
+  image: string;
+  category: string;
+  quantity?: number; // Optional quantity for cart
+}
+
 export default function Products() {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const { products, loading, error } = useSelector(
     (state: RootState) => state.products
   );
-  interface Product {
-    id: string;
-    name: string;
-    price: number;
-    imageUrl: string;
-    quantity?: number;
-  }
+
+  // Fetch products on component mount
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
 
+  // Handle add to cart functionality
   const handleAddToCart = (product: Product) => {
-    dispatch(addToCart(product));
+    const productWithQuantity = { ...product, quantity: 1 }; // Add default quantity
+    dispatch(addToCart(productWithQuantity)); // Dispatch the product to cart
     alert("Item added to cart");
   };
 
@@ -47,17 +55,17 @@ export default function Products() {
                 key={product._id}
                 className="bg-gray-800 p-4 rounded-lg shadow-lg transform transition duration-300 hover:scale-105"
               >
-                <img
+                <Image
                   src={product.image}
                   alt={product.name}
                   className="w-full h-64 object-cover rounded-lg mb-4 cursor-pointer"
-                  onClick={() => router.push(`/products/${product._id}`)}
+                  onClick={() => router.push(`/products/${product._id}`)} // Navigate to product detail page
                 />
                 <h2 className="text-xl font-bold">{product.name}</h2>
                 <p className="text-gray-400">{product.description}</p>
                 <p className="text-lg font-bold mt-2">${product.price}</p>
                 <button
-                  onClick={() => handleAddToCart(product)}
+                  onClick={() => handleAddToCart(product)} // Add to cart functionality
                   className="mt-3 w-full bg-white text-black font-bold py-2 rounded hover:bg-gray-300 transition"
                 >
                   Add to Cart

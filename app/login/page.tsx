@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { useDispatch } from "react-redux";
@@ -34,12 +34,12 @@ export default function Login() {
       alert(data.error || "Login failed");
     }
   };
-  const token = localStorage.getItem("token");
-  useEffect(() => {
-    if (!token) {
-      router.push("/login");
-    }
-  }, [token, router]);
+  // const token = localStorage.getItem("token");
+  // useEffect(() => {
+  //   if (!token) {
+  //     router.push("/login");
+  //   }
+  // }, [token, router]);
 
   return (
     <main className="flex items-center justify-center min-h-screen bg-black text-white">
