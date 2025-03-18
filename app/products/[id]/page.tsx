@@ -39,7 +39,7 @@ export default function ProductDetail() {
             <img
               src={product.image}
               alt={product.name}
-              className="w-full h-80 object-cover rounded-lg mb-4"
+              className="w-full h-full object-cover rounded-lg mb-4"
             />
             <h1 className="text-3xl font-bold">{product.name}</h1>
             <p className="text-lg text-gray-400">{product.description}</p>

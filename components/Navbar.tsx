@@ -49,7 +49,19 @@ const Navbar = () => {
 
   return (
     <nav className="flex justify-between p-4 bg-black text-white relative">
-      <h1 className="text-2xl font-bold">My E-Commerce Store</h1>
+      <div className="flex  relative">
+        <img
+          height={50}
+          width={100}
+          src="https://assets.grok.com/anon-users/5732b2cc-fe26-4a81-ab22-c43630161043/53MHZGT0U5TwFzVs-generated_image.jpg"
+        />
+        {/* <h1
+          className="text-2xl font-bold"
+          onClick={() => router.push("/products")}
+        >
+          My Genz
+        </h1> */}
+      </div>
       <div className="space-x-4 flex items-center">
         <Link href="/">Home</Link>
         <Link href="/products">Products</Link>

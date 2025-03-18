@@ -9,6 +9,7 @@ import { addToCart } from "../store/redux/slices/cartSlice";
 // import Image from "next/image";
 import React from "react";
 import BNavbar from "@/components/Bottomnav";
+import LoadingSkeleton from "@/components/LoadingSkeleton";
 
 // Define the Product interface here for better reusability
 interface Product {
@@ -44,10 +45,16 @@ export default function Products() {
     <main className="min-h-screen bg-black text-white">
       <Navbar />
       <section className="p-6">
-        <h1 className="text-3xl font-bold text-center mb-6">Our Products</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* <h1 className="text-3xl font-bold text-center mb-6">Our Products</h1> */}
+        <div className="min-h-screen grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {loading ? (
-            <p className="text-center text-gray-400">Loading products...</p>
+            <div className="flex  justify-center">
+              {/* <p className="flex items-center justify-center">
+                {"       "}
+                <LoadingSkeleton />
+              </p> */}
+              <LoadingSkeleton />
+            </div>
           ) : error ? (
             <p className="text-center text-red-500">{error}</p>
           ) : (
@@ -59,7 +66,7 @@ export default function Products() {
                 <img
                   src={product.image}
                   alt={product.name}
-                  className="w-full h-64 object-cover rounded-lg mb-4 cursor-pointer"
+                  className="w-full h-100 object-cover rounded-lg mb-4 cursor-pointer"
                   onClick={() => router.push(`/products/${product._id}`)} // Navigate to product detail page
                 />
                 <h2 className="text-xl font-bold">{product.name}</h2>
