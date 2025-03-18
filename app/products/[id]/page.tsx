@@ -43,7 +43,7 @@ export default function ProductDetail() {
             />
             <h1 className="text-3xl font-bold">{product.name}</h1>
             <p className="text-lg text-gray-400">{product.description}</p>
-            <p className="text-xl font-bold mt-2">${product.price}</p>
+            <p className="text-xl font-bold mt-2">₹{product.price}</p>
             <button
               onClick={handleAddToCart}
               className="mt-4 w-full bg-white text-black font-bold py-2 rounded hover:bg-gray-300 transition"
