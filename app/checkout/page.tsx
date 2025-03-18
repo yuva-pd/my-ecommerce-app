@@ -4,6 +4,13 @@ import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/redux/store";
 
+// Declare Razorpay type for window object
+declare global {
+  interface Window {
+    Razorpay: any; // Use the Razorpay type if installed (replace 'any' if types available)
+  }
+}
+
 const Checkout = () => {
   const router = useRouter();
   const cart = useSelector((state: RootState) => state.cart.items);
@@ -53,6 +60,10 @@ const Checkout = () => {
         }),
       });
 
+      if (!response.ok) {
+        throw new Error("Failed to create order");
+      }
+
       const order = await response.json();
 
       const options = {
@@ -71,8 +82,13 @@ const Checkout = () => {
         },
       };
 
-      const razor = new (window as any).Razorpay(options);
-      razor.open();
+      // Ensure Razorpay is available before opening
+      if (typeof window !== "undefined" && window.Razorpay) {
+        const razor = new window.Razorpay(options);
+        razor.open();
+      } else {
+        alert("Razorpay SDK not loaded");
+      }
     } catch (error) {
       console.error("Payment error:", error);
       alert("Payment failed. Try again.");
@@ -100,6 +116,7 @@ const Checkout = () => {
         value={formData.name}
         onChange={(e) => handleChange(e, "name")}
         required
+        className="w-full p-2 mt-4 bg-gray-800 rounded"
       />
       <input
         type="email"
@@ -107,6 +124,7 @@ const Checkout = () => {
         value={formData.email}
         onChange={(e) => handleChange(e, "email")}
         required
+        className="w-full p-2 mt-4 bg-gray-800 rounded"
       />
       <input
         type="tel"
@@ -114,6 +132,7 @@ const Checkout = () => {
         value={formData.phone}
         onChange={(e) => handleChange(e, "phone")}
         required
+        className="w-full p-2 mt-4 bg-gray-800 rounded"
       />
       <input
         type="text"
@@ -121,6 +140,7 @@ const Checkout = () => {
         value={formData.address.street}
         onChange={(e) => handleChange(e, "address", "street")}
         required
+        className="w-full p-2 mt-4 bg-gray-800 rounded"
       />
       <input
         type="text"
@@ -128,9 +148,13 @@ const Checkout = () => {
         value={formData.address.city}
         onChange={(e) => handleChange(e, "address", "city")}
         required
+        className="w-full p-2 mt-4 bg-gray-800 rounded"
       />
 
-      <button onClick={handlePayment} className="mt-4 bg-green-500 p-2 rounded">
+      <button
+        onClick={handlePayment}
+        className="mt-4 bg-green-500 p-2 rounded hover:bg-green-600"
+      >
         Pay Now
       </button>
     </main>
