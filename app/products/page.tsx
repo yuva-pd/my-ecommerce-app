@@ -64,7 +64,7 @@ export default function Products() {
                 />
                 <h2 className="text-xl font-bold">{product.name}</h2>
                 <p className="text-gray-400">{product.description}</p>
-                <p className="text-lg font-bold mt-2">₹{product.price}</p>
+                <p className="text-lg font-bold mt-2">₹ {product.price}</p>
                 <button
                   onClick={() => handleAddToCart(product)} // Add to cart functionality
                   className="mt-3 w-full bg-white text-black font-bold py-2 rounded hover:bg-gray-300 transition"
