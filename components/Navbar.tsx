@@ -7,7 +7,8 @@ import { logout } from "../app/store/redux/slices/authSlice";
 import { signOut } from "next-auth/react";
 import { useState, useEffect, useRef } from "react";
 import React from "react";
-
+import logo from "./logo.jpg";
+import Image from "next/image";
 const Navbar = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -50,11 +51,7 @@ const Navbar = () => {
   return (
     <nav className="flex justify-between p-4 bg-black text-white relative">
       <div className="flex  relative">
-        <img
-          height={50}
-          width={100}
-          src="https://assets.grok.com/anon-users/5732b2cc-fe26-4a81-ab22-c43630161043/53MHZGT0U5TwFzVs-generated_image.jpg"
-        />
+        <Image height={50} width={100} src={logo} alt={""} />
         {/* <h1
           className="text-2xl font-bold"
           onClick={() => router.push("/products")}
