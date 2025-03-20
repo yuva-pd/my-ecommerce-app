@@ -4,8 +4,9 @@ import "../styles/globals.css";
 import { store } from "./store/redux/store";
 import { Provider } from "react-redux";
 import { SessionProvider } from "next-auth/react";
-import AuthWatcher from "./AuthWatcher"; // Separate AuthWatcher for clarity
+import AuthWatcher from "./AuthWatcher";
 import React from "react";
+import Script from "next/script";
 
 // Custom fonts from Google
 const geistSans = Geist({
@@ -18,7 +19,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Root layout component wrapping your application
 export default function RootLayout({
   children,
 }: {
@@ -26,6 +26,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        {/* Razorpay Script - Loads Razorpay SDK */}
+        <Script
+          src="https://checkout.razorpay.com/v1/checkout.js"
+          strategy="beforeInteractive"
+        />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <SessionProvider>
           <Provider store={store}>

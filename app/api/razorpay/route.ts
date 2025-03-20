@@ -8,23 +8,31 @@ export async function POST(req: Request) {
     const { items, totalAmount, name, email, phone, address } =
       await req.json();
 
+    // Validate payload
+    if (!items || !totalAmount || !name || !email || !phone || !address) {
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
     await connectToDatabase();
 
-    // Initialize Razorpay instance
+    // Initialize Razorpay
     const razorpay = new Razorpay({
       key_id: process.env.RAZORPAY_KEY_ID!,
       key_secret: process.env.RAZORPAY_KEY_SECRET!,
     });
 
-    // Create Razorpay Order
+    // Create Razorpay order
     const order = await razorpay.orders.create({
-      amount: totalAmount * 100, // Razorpay needs amount in paise
+      amount: totalAmount * 100, // Convert amount to paise
       currency: "INR",
-      payment_capture: 1,
+      payment_capture: true,
       notes: { name, email, phone, ...address },
     });
 
-    // Store order in MongoDB
+    // Save order in MongoDB
     const newOrder = new Order({
       user: email,
       items,
@@ -32,7 +40,8 @@ export async function POST(req: Request) {
       shippingAddress: address,
       email,
       phone,
-      paymentStatus: "Pending", // Update after successful payment
+      paymentStatus: "Pending",
+      razorpayOrderId: order.id,
     });
 
     await newOrder.save();
@@ -42,7 +51,7 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error("Error creating order:", error);
     return NextResponse.json(
-      { error: "Failed to create order" },
+      { error: "Failed to create order", details: error },
       { status: 500 }
     );
   }
