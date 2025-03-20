@@ -1,35 +1,33 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProducts } from "@/app/store/redux/slices/productSlice";
+import { addToCart } from "@/app/store/redux/slices/cartSlice";
 import Navbar from "@/components/Navbar";
-
-interface Product {
-  _id: string;
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-  category: string;
-}
+import { RootState, AppDispatch } from "@/app/store/redux/store";
+// import Image from "next/image";
+import React from "react";
+import BNavbar from "@/components/Bottomnav";
 
 export default function ProductDetail() {
   const { id } = useParams();
-  const [product, setProduct] = useState<Product | null>(null);
-  const [quantity, setQuantity] = useState(1);
+  const dispatch = useDispatch<AppDispatch>();
+  const { products } = useSelector((state: RootState) => state.products);
+  const product = products.find((p) => p._id === id);
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      const res = await fetch(`/api/products/${id}`);
-      if (!res.ok) throw new Error("Product not found");
-      const data = await res.json();
-      setProduct(data);
-    };
-    fetchProduct();
-  }, [id]);
+    if (!product) {
+      dispatch(fetchProducts());
+    }
+  }, [dispatch, product]);
 
-  const handleBuyNow = () => {
-    alert(`Buying ${quantity} of ${product?.name}`);
-    // You can implement the checkout or payment logic here
+  const handleAddToCart = () => {
+    if (product) {
+      // Ensure the product has a quantity field before dispatching
+      const productWithQuantity = { ...product, quantity: 1 };
+      dispatch(addToCart(productWithQuantity));
+    }
   };
 
   return (
@@ -41,35 +39,16 @@ export default function ProductDetail() {
             <img
               src={product.image}
               alt={product.name}
-              className="w-full h-80 object-cover rounded-lg mb-4"
+              className="w-full h-full object-cover rounded-lg mb-4"
             />
             <h1 className="text-3xl font-bold">{product.name}</h1>
             <p className="text-lg text-gray-400">{product.description}</p>
-            <p className="text-xl font-bold mt-2">${product.price}</p>
-
-            {/* Quantity Selector */}
-            <div className="mt-4 flex items-center space-x-4">
-              <label htmlFor="quantity" className="text-lg">
-                Quantity:
-              </label>
-              <input
-                id="quantity"
-                type="number"
-                value={quantity}
-                onChange={(e) =>
-                  setQuantity(Math.max(1, parseInt(e.target.value)))
-                }
-                className="w-16 p-2 bg-gray-700 border border-gray-600 rounded text-white text-center"
-                min="1"
-              />
-            </div>
-
-            {/* Buy Now Button */}
+            <p className="text-xl font-bold mt-2">₹ {product.price}</p>
             <button
-              onClick={handleBuyNow}
+              onClick={handleAddToCart}
               className="mt-4 w-full bg-white text-black font-bold py-2 rounded hover:bg-gray-300 transition"
             >
-              Buy Now
+              Add to Cart
             </button>
           </div>
         ) : (
@@ -78,6 +57,7 @@ export default function ProductDetail() {
           </p>
         )}
       </div>
+      <BNavbar />
     </main>
   );
 }

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { NextResponse } from "next/server";
 
 const MONGODB_URI = process.env.MONGODB_URI || "";
 console.log(MONGODB_URI, "MONGODB_URI");
@@ -18,6 +19,7 @@ export const connectToDatabase = async () => {
     console.log("✅ MongoDB Connected!");
   } catch (error) {
     console.error("❌ MongoDB Connection Error:", error);
+    return NextResponse.json({ error: "Failed to fetch" }, { status: 500 });
     throw error;
   }
 };
